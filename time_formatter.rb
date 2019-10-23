@@ -1,4 +1,4 @@
-class TimeFormat
+class TimeFormatter
 
   ALLOWED_FORMATS = { year: '%Y',
               month: '%m',
@@ -7,8 +7,21 @@ class TimeFormat
               minute: '%M',
               second: '%S'}.freeze
 
-  def initialize(formats_string)
-    @formats = formats_string.split(',')
+  def initialize(request)
+    @request = request
+    @formats = request.params['format']&.split(',')
+  end
+
+  def valid_path?
+    @request.path_info == '/time'
+  end
+
+  def valid_method?
+    @request.get?
+  end
+
+  def empty_format?
+    @formats.nil?
   end
 
   def valid?
